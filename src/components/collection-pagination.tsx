@@ -26,15 +26,18 @@ export function CollectionPagination({
 
   const goToPage = (page: number) => {
     setSearchParams((prev) => {
+      const next = new URLSearchParams(prev)
       if (page === 1) {
-        prev.delete('page')
+        next.delete('page')
       } else {
-        prev.set('page', String(page))
+        next.set('page', String(page))
       }
-      return prev
-    })
-    // Smooth scroll to grid top
-    document.getElementById('artwork-grid')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      return next
+    }, { replace: true })
+
+    // Instant scroll to top — smooth scroll doesn't work reliably because
+    // page height changes as artworks load progressively
+    window.scrollTo(0, 0)
   }
 
   const pages = getPageNumbers(currentPage, totalPages)

@@ -1,5 +1,7 @@
-import { createContext, useContext, useReducer, useCallback, type ReactNode } from 'react'
+import { createContext, useContext, useReducer, useCallback, useEffect, type ReactNode } from 'react'
 import type { CollectedArtwork } from '@/types/artwork'
+
+const STORAGE_KEY = 'curatorial-collected'
 
 interface CollectedState {
   items: Map<number, CollectedArtwork>
@@ -22,6 +24,19 @@ function reducer(state: CollectedState, action: Action): CollectedState {
   }
 }
 
+function loadFromSession(): CollectedState {
+  try {
+    const stored = sessionStorage.getItem(STORAGE_KEY)
+    if (stored) {
+      const entries = JSON.parse(stored) as [number, CollectedArtwork][]
+      return { items: new Map(entries) }
+    }
+  } catch {
+    // Ignore parse errors
+  }
+  return { items: new Map() }
+}
+
 interface CollectedContextValue {
   items: Map<number, CollectedArtwork>
   toggle: (artwork: CollectedArtwork) => void
@@ -32,7 +47,12 @@ interface CollectedContextValue {
 const CollectedContext = createContext<CollectedContextValue | null>(null)
 
 export function CollectedProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, { items: new Map() })
+  const [state, dispatch] = useReducer(reducer, null, loadFromSession)
+
+  // Persist to sessionStorage on every change
+  useEffect(() => {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify([...state.items.entries()]))
+  }, [state.items])
 
   const toggle = useCallback(
     (artwork: CollectedArtwork) => dispatch({ type: 'TOGGLE', artwork }),
