@@ -57,6 +57,7 @@ export function ArtworkDetailPage() {
                 src={artwork.primaryImage || artwork.primaryImageSmall}
                 alt={`${artwork.title}${artwork.artistDisplayName ? ` by ${artwork.artistDisplayName}` : ''}`}
                 className="w-full border border-border"
+                contain
               />
             </div>
 

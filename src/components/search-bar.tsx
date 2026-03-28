@@ -19,15 +19,17 @@ export function SearchBar({ onClose }: SearchBarProps) {
     const trimmed = value.trim()
     if (trimmed) {
       setSearchParams((prev) => {
-        prev.set('q', trimmed)
-        prev.delete('page')
-        return prev
+        const next = new URLSearchParams(prev)
+        next.set('q', trimmed)
+        next.delete('page')
+        return next
       })
     } else {
       setSearchParams((prev) => {
-        prev.delete('q')
-        prev.delete('page')
-        return prev
+        const next = new URLSearchParams(prev)
+        next.delete('q')
+        next.delete('page')
+        return next
       })
     }
     onClose()

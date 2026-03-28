@@ -13,10 +13,13 @@ export function CollectionPage() {
   const {
     artworks,
     isLoading,
+    isLoadingObjects,
+    loadingCount,
     currentPage,
     totalPages,
     totalItems,
     itemsPerPage,
+    hasQuery,
   } = useCollection()
 
   const handleReset = () => {
@@ -27,20 +30,26 @@ export function CollectionPage() {
     <>
       <PageHeader
         title="Collection"
-        description="Explore highlighted works from The Metropolitan Museum of Art's open-access collection."
+        description="Explore over 400,000 works from The Metropolitan Museum of Art's open-access collection."
       />
 
       <DepartmentFilter />
       <DateRangeFilter />
 
       <div id="artwork-grid">
-        {isLoading ? (
+        {!hasQuery ? (
+          <div className="py-20 text-center">
+            <p className="text-sm text-muted-foreground">
+              Search for artworks using the search bar above.
+            </p>
+          </div>
+        ) : isLoading ? (
           <ArtworkGridSkeleton />
-        ) : artworks.length === 0 ? (
+        ) : artworks.length === 0 && !isLoadingObjects ? (
           <EmptyState onReset={handleReset} />
         ) : (
           <>
-            <ArtworkGrid artworks={artworks} />
+            <ArtworkGrid artworks={artworks} skeletonCount={loadingCount} />
             <CollectionPagination
               currentPage={currentPage}
               totalPages={totalPages}

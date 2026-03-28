@@ -5,9 +5,10 @@ interface BlurImageProps {
   src: string
   alt: string
   className?: string
+  contain?: boolean
 }
 
-export function BlurImage({ src, alt, className }: BlurImageProps) {
+export function BlurImage({ src, alt, className, contain }: BlurImageProps) {
   const [loaded, setLoaded] = useState(false)
   const [error, setError] = useState(false)
 
@@ -49,7 +50,8 @@ export function BlurImage({ src, alt, className }: BlurImageProps) {
         onLoad={() => setLoaded(true)}
         onError={() => setError(true)}
         className={cn(
-          'h-full w-full object-cover transition-opacity duration-400',
+          'w-full transition-opacity duration-400',
+          contain ? 'object-contain' : 'h-full object-cover',
           loaded ? 'opacity-100' : 'opacity-0'
         )}
       />
