@@ -3,6 +3,7 @@
 A research-oriented dashboard for exploring the Metropolitan Museum of Art's open collection. Built for curators who need to discover artifacts, analyze historical context, and organize digital exhibitions.
 
 **Live Demo:** [curatorial.vercel.app](https://curatorial.vercel.app)
+
 ---
 
 ## Getting Started
@@ -19,9 +20,9 @@ npm run build     # production build
 ### Tech Stack
 
 - **React 19** + **TypeScript 5.9** — strict types, modern concurrent features
-- **Vite 8** — fast HMR, Oxc-based React plugin
+- **Vite 8** — fast dev server with instant hot reload
 - **TanStack React Query v5** — server state, caching, progressive loading
-- **Tailwind CSS v4** — utility-first styling with custom museum design tokens
+- **Tailwind CSS v4** — utility-first styling with custom theme tokens
 - **Zod v4** — runtime validation and transformation of API responses
 - **React Router v7** — URL-driven state for deep-linking and filter persistence
 - **Vitest + Testing Library + MSW** — unit, component, and integration tests
@@ -58,7 +59,7 @@ src/
 │   ├── ui/           # Base UI primitives (shadcn v4 + Base UI)
 │   └── __tests__/    # Component tests
 ├── context/          # React context (CollectedProvider)
-├── hooks/            # Custom hooks (useCollection, useArtworkDetail, useDebounce)
+├── hooks/            # Custom hooks (useCollection, useArtworkDetail)
 ├── lib/              # API client, Zod schemas, concurrency limiter, constants
 │   └── __tests__/    # Schema and utility tests
 ├── pages/            # Route-level page components
@@ -73,6 +74,6 @@ AI tools (Claude) were used throughout development for:
 - **Scaffolding** — initial project setup, component structure, and shadcn configuration
 - **Implementation** — progressive loading strategy, concurrency limiter, Zod schema design
 - **Code review** — identifying redundant query config, missing test coverage, and architectural inconsistencies
-- **Refactoring** — consolidating retry strategies, removing unnecessary JS-based responsive hooks in favor of CSS
+- **Refactoring** — unifying query configuration, replacing JS-based responsive logic with Tailwind CSS classes, simplifying component types
 
 The human role focused on architectural decisions, requirement interpretation, UX judgment calls, and validating that AI-generated code met the specification. AI was treated as a fast pair programmer — useful for velocity, but every output was reviewed for correctness and coherence.
