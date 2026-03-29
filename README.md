@@ -76,4 +76,4 @@ AI tools (Claude) were used throughout development for:
 - **Code review** — identifying redundant query config, missing test coverage, and architectural inconsistencies
 - **Refactoring** — unifying query configuration, replacing JS-based responsive logic with Tailwind CSS classes, simplifying component types
 
-The human role focused on architectural decisions, requirement interpretation, UX judgment calls, and validating that AI-generated code met the specification. AI was treated as a fast pair programmer — useful for velocity, but every output was reviewed for correctness and coherence.
+The human role focused on planning, architectural decisions, requirement interpretation, and validating that AI-generated code met the specification. Every output was reviewed — if I couldn't fully explain a decision, it got simplified or removed (e.g., removing `useDebounce` in favor of blur/Enter, replacing `useMediaQuery` with Tailwind classes, simplifying component types from 18 fields to 6).
