@@ -8,7 +8,7 @@ import { EmptyState } from '@/components/empty-state'
 import { CollectionPagination } from '@/components/collection-pagination'
 import { useCollection } from '@/hooks/use-collection'
 
-export function CollectionPage() {
+function CollectionContent() {
   const [, setSearchParams] = useSearchParams()
   const {
     artworks,
@@ -22,42 +22,48 @@ export function CollectionPage() {
     hasQuery,
   } = useCollection()
 
-  const handleReset = () => {
-    setSearchParams({})
+  if (!hasQuery) {
+    return (
+      <div className="py-20 text-center">
+        <p className="text-sm text-muted-foreground">
+          Search for artworks using the search bar above.
+        </p>
+      </div>
+    )
   }
 
+  if (isLoading) {
+    return <ArtworkGridSkeleton />
+  }
+
+  if (artworks.length === 0 && !isLoadingObjects) {
+    return <EmptyState onReset={() => setSearchParams({})} />
+  }
+
+  return (
+    <>
+      <ArtworkGrid artworks={artworks} skeletonCount={loadingCount} />
+      <CollectionPagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        totalItems={totalItems}
+        itemsPerPage={itemsPerPage}
+      />
+    </>
+  )
+}
+
+export function CollectionPage() {
   return (
     <>
       <PageHeader
         title="Collection"
         description="Explore over 400,000 works from The Metropolitan Museum of Art's open-access collection."
       />
-
       <DepartmentFilter />
       <DateRangeFilter />
-
       <div id="artwork-grid">
-        {!hasQuery ? (
-          <div className="py-20 text-center">
-            <p className="text-sm text-muted-foreground">
-              Search for artworks using the search bar above.
-            </p>
-          </div>
-        ) : isLoading ? (
-          <ArtworkGridSkeleton />
-        ) : artworks.length === 0 && !isLoadingObjects ? (
-          <EmptyState onReset={handleReset} />
-        ) : (
-          <>
-            <ArtworkGrid artworks={artworks} skeletonCount={loadingCount} />
-            <CollectionPagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              totalItems={totalItems}
-              itemsPerPage={itemsPerPage}
-            />
-          </>
-        )}
+        <CollectionContent />
       </div>
     </>
   )

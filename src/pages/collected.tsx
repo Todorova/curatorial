@@ -2,28 +2,10 @@ import { Link } from 'react-router-dom'
 import { PageHeader } from '@/components/page-header'
 import { ArtworkGrid } from '@/components/artwork-grid'
 import { useCollected } from '@/context/collected-context'
-import type { Artwork } from '@/types/artwork'
 
 export function CollectedPage() {
   const { items } = useCollected()
-
-  // Map collected items to Artwork shape (fill missing fields with defaults)
-  const artworks: Artwork[] = Array.from(items.values()).map((item) => ({
-    ...item,
-    artistDisplayBio: '',
-    objectBeginDate: 0,
-    objectEndDate: 0,
-    medium: '',
-    primaryImage: '',
-    isHighlight: false,
-    accessionNumber: '',
-    dimensions: '',
-    creditLine: '',
-    objectURL: '',
-    tags: [],
-    constituents: null,
-    isPublicDomain: false,
-  }))
+  const artworks = Array.from(items.values())
 
   return (
     <>

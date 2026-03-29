@@ -2,8 +2,7 @@
 
 A research-oriented dashboard for exploring the Metropolitan Museum of Art's open collection. Built for curators who need to discover artifacts, analyze historical context, and organize digital exhibitions.
 
-**Live Demo:** [curatorial.vercel.app](https://curatorial.vercel.app) _(if deployed)_
-
+**Live Demo:** [curatorial.vercel.app](https://curatorial.vercel.app)
 ---
 
 ## Getting Started

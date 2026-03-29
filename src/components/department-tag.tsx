@@ -12,7 +12,7 @@ export function DepartmentTag({ label, isActive, onClick }: DepartmentTagProps) 
       onClick={onClick}
       aria-pressed={isActive}
       className={cn(
-        'inline-flex shrink-0 items-center rounded-sm border px-3.5 py-1.5 text-xs font-medium uppercase tracking-[0.06em] transition-all duration-200 cursor-pointer',
+        'inline-flex shrink-0 items-center rounded-sm border px-3.5 py-1.5 text-xs font-medium uppercase tracking-museum transition-all duration-200 cursor-pointer',
         isActive
           ? 'border-foreground bg-foreground text-background'
           : 'border-border bg-transparent text-muted-foreground hover:border-foreground hover:text-foreground'

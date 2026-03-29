@@ -1,9 +1,9 @@
-import type { Artwork } from '@/types/artwork'
+import type { CollectedArtwork } from '@/types/artwork'
 import { ArtworkCard } from './artwork-card'
 import { ArtworkSkeleton } from './artwork-skeleton'
 
 interface ArtworkGridProps {
-  artworks: Artwork[]
+  artworks: CollectedArtwork[]
   skeletonCount?: number
 }
 

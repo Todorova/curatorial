@@ -10,6 +10,16 @@
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: ui-monospace, 'Cascadia Code', 'Source Code Pro', monospace;
 
+  /* Layout */
+  --width-content: 1126px;
+
+  /* Letter spacing */
+  --tracking-museum: 0.06em;
+  --tracking-museum-tight: 0.05em;
+
+  /* Font sizes */
+  --text-badge: 10px;
+
   /* Shadows */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
