@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 interface SearchBarProps {
@@ -8,14 +8,8 @@ interface SearchBarProps {
 export function SearchBar({ onClose }: SearchBarProps) {
   const [searchParams, setSearchParams] = useSearchParams()
   const [value, setValue] = useState(searchParams.get('q') ?? '')
-  const inputRef = useRef<HTMLInputElement>(null)
 
-  useEffect(() => {
-    inputRef.current?.focus()
-  }, [])
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+  function applySearch() {
     const trimmed = value.trim()
     if (trimmed) {
       setSearchParams((prev) => {
@@ -35,13 +29,19 @@ export function SearchBar({ onClose }: SearchBarProps) {
     onClose()
   }
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    applySearch()
+  }
+
   return (
     <form onSubmit={handleSubmit} className="relative">
       <input
-        ref={inputRef}
+        autoFocus
         type="text"
         value={value}
         onChange={(e) => setValue(e.target.value)}
+        onBlur={applySearch}
         placeholder="Search by title, artist, or keyword..."
         className="w-full border-b border-border bg-transparent py-2 text-sm text-foreground placeholder:text-muted-foreground placeholder:italic focus:border-accent focus:outline-none transition-colors"
       />

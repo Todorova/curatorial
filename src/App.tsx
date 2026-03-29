@@ -8,7 +8,7 @@ import { AboutPage } from '@/pages/about'
 
 export default function App() {
   return (
-    <div className="mx-auto flex min-h-svh max-w-[1126px] flex-col border-x border-border">
+    <div className="mx-auto flex min-h-svh max-w-content flex-col border-x border-border">
       <Navbar />
       <main className="flex-1">
         <Routes>

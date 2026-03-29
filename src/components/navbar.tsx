@@ -19,14 +19,14 @@ export function Navbar() {
   const { count } = useCollected()
 
   useEffect(() => {
+    setMobileMenuOpen(false)
+  }, [location.pathname])
+
+  useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 0)
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
-
-  useEffect(() => {
-    setMobileMenuOpen(false)
-  }, [location.pathname])
 
   const isActive = (to: string) =>
     to === '/' ? location.pathname === '/' : location.pathname.startsWith(to)
@@ -41,11 +41,11 @@ export function Navbar() {
             : 'bg-background'
         )}
       >
-        <div className="mx-auto flex h-16 max-w-[1126px] items-center justify-between px-8 md:h-16 max-md:h-14 max-md:px-4">
+        <div className="mx-auto flex h-16 max-w-content items-center justify-between px-8 md:h-16 max-md:h-14 max-md:px-4">
           {/* Wordmark */}
           <Link
             to="/"
-            className="font-serif text-xl tracking-[0.06em] text-foreground no-underline uppercase"
+            className="font-serif text-xl tracking-museum text-foreground no-underline uppercase"
           >
             Curatorial
           </Link>
@@ -58,7 +58,7 @@ export function Navbar() {
                 to={link.to}
                 aria-current={isActive(link.to) ? 'page' : undefined}
                 className={cn(
-                  'relative flex items-center gap-1.5 py-5 text-sm font-medium tracking-[0.05em] uppercase no-underline transition-colors duration-200',
+                  'relative flex items-center gap-1.5 py-5 text-sm font-medium tracking-museum-tight uppercase no-underline transition-colors duration-200',
                   isActive(link.to)
                     ? 'text-foreground'
                     : 'text-muted-foreground hover:text-foreground'
@@ -66,7 +66,7 @@ export function Navbar() {
               >
                 {link.label}
                 {link.to === '/collected' && count > 0 && (
-                  <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1.5 text-[10px] font-semibold text-accent-foreground">
+                  <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1.5 text-badge font-semibold text-accent-foreground">
                     {count}
                   </span>
                 )}
@@ -108,7 +108,7 @@ export function Navbar() {
         {/* Search bar (expandable) */}
         {searchOpen && (
           <div className="border-t border-border">
-            <div className="mx-auto max-w-[1126px] px-8 py-3 max-md:px-4">
+            <div className="mx-auto max-w-content px-8 py-3 max-md:px-4">
               <SearchBar onClose={() => setSearchOpen(false)} />
             </div>
           </div>

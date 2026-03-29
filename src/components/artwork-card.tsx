@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom'
-import type { Artwork } from '@/types/artwork'
+import type { CollectedArtwork } from '@/types/artwork'
 import { ProgressiveImage } from './blur-image'
 import { CollectButton } from './collect-button'
 
 interface ArtworkCardProps {
-  artwork: Artwork
+  artwork: CollectedArtwork
   style?: React.CSSProperties
 }
 

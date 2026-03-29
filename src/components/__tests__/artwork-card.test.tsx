@@ -3,29 +3,16 @@ import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { CollectedProvider } from '@/context/collected-context'
 import { ArtworkCard } from '../artwork-card'
-import type { Artwork } from '@/types/artwork'
+import type { CollectedArtwork } from '@/types/artwork'
 
-function renderCard(artwork: Partial<Artwork>) {
-  const defaultArtwork: Artwork = {
+function renderCard(artwork: Partial<CollectedArtwork>) {
+  const defaultArtwork: CollectedArtwork = {
     objectID: 1,
     title: 'Test Artwork',
     artistDisplayName: 'Test Artist',
-    artistDisplayBio: '',
     objectDate: '1900',
-    objectBeginDate: 1900,
-    objectEndDate: 1900,
-    medium: 'Oil on canvas',
     department: 'European Paintings',
     primaryImageSmall: 'https://example.com/small.jpg',
-    primaryImage: 'https://example.com/large.jpg',
-    isHighlight: false,
-    accessionNumber: '',
-    dimensions: '',
-    creditLine: '',
-    objectURL: '',
-    tags: [],
-    constituents: null,
-    isPublicDomain: false,
     ...artwork,
   }
 

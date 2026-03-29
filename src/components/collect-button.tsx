@@ -1,22 +1,11 @@
 import { Bookmark } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useCollected } from '@/context/collected-context'
-import type { Artwork, CollectedArtwork } from '@/types/artwork'
+import type { CollectedArtwork } from '@/types/artwork'
 import { Button } from '@/components/ui/button'
 
-function toCollectedArtwork(artwork: Artwork): CollectedArtwork {
-  return {
-    objectID: artwork.objectID,
-    title: artwork.title,
-    artistDisplayName: artwork.artistDisplayName,
-    objectDate: artwork.objectDate,
-    primaryImageSmall: artwork.primaryImageSmall,
-    department: artwork.department,
-  }
-}
-
 interface CollectButtonProps {
-  artwork: Artwork
+  artwork: CollectedArtwork
   variant?: 'card' | 'detail'
 }
 
@@ -27,7 +16,7 @@ export function CollectButton({ artwork, variant = 'card' }: CollectButtonProps)
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    toggle(toCollectedArtwork(artwork))
+    toggle(artwork)
   }
 
   if (variant === 'detail') {
