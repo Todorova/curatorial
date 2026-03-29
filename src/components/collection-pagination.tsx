@@ -1,7 +1,6 @@
 import { useSearchParams } from 'react-router-dom'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { useMediaQuery } from '@/hooks/use-media-query'
 
 interface CollectionPaginationProps {
   currentPage: number
@@ -17,7 +16,6 @@ export function CollectionPagination({
   itemsPerPage,
 }: CollectionPaginationProps) {
   const [, setSearchParams] = useSearchParams()
-  const isMobile = useMediaQuery('(max-width: 639px)')
 
   if (totalPages <= 1) return null
 
@@ -66,40 +64,38 @@ export function CollectionPagination({
           <span className="max-sm:sr-only">Previous</span>
         </button>
 
-        {isMobile ? (
-          /* Mobile: "Page X of Y" */
-          <span className="px-4 text-sm text-muted-foreground">
-            Page {currentPage} of {totalPages}
-          </span>
-        ) : (
-          /* Desktop: page numbers */
-          <div className="flex items-center gap-1">
-            {pages.map((page, i) =>
-              page === '...' ? (
-                <span
-                  key={`ellipsis-${i}`}
-                  className="flex h-10 w-10 items-center justify-center text-sm text-muted-foreground"
-                >
-                  &hellip;
-                </span>
-              ) : (
-                <button
-                  key={page}
-                  onClick={() => goToPage(page as number)}
-                  aria-current={currentPage === page ? 'page' : undefined}
-                  className={cn(
-                    'flex h-10 w-10 items-center justify-center text-sm font-medium transition-all duration-200 cursor-pointer',
-                    currentPage === page
-                      ? 'bg-foreground text-background'
-                      : 'text-muted-foreground hover:border hover:border-foreground hover:text-foreground'
-                  )}
-                >
-                  {page}
-                </button>
-              )
-            )}
-          </div>
-        )}
+        {/* Mobile: "Page X of Y" */}
+        <span className="px-4 text-sm text-muted-foreground sm:hidden">
+          Page {currentPage} of {totalPages}
+        </span>
+
+        {/* Desktop: page numbers */}
+        <div className="hidden items-center gap-1 sm:flex">
+          {pages.map((page, i) =>
+            page === '...' ? (
+              <span
+                key={`ellipsis-${i}`}
+                className="flex h-10 w-10 items-center justify-center text-sm text-muted-foreground"
+              >
+                &hellip;
+              </span>
+            ) : (
+              <button
+                key={page}
+                onClick={() => goToPage(page as number)}
+                aria-current={currentPage === page ? 'page' : undefined}
+                className={cn(
+                  'flex h-10 w-10 items-center justify-center text-sm font-medium transition-all duration-200 cursor-pointer',
+                  currentPage === page
+                    ? 'bg-foreground text-background'
+                    : 'text-muted-foreground hover:border hover:border-foreground hover:text-foreground'
+                )}
+              >
+                {page}
+              </button>
+            )
+          )}
+        </div>
 
         {/* Next */}
         <button

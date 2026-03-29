@@ -3,7 +3,7 @@ import { useQuery, useQueries, keepPreviousData } from '@tanstack/react-query'
 import { useSearchParams } from 'react-router-dom'
 import { searchArtworks, getArtwork } from '@/lib/api'
 import { apiLimiter } from '@/lib/api-limiter'
-import { ITEMS_PER_PAGE, STALE_TIME } from '@/lib/constants'
+import { ITEMS_PER_PAGE } from '@/lib/constants'
 import type { Artwork } from '@/types/artwork'
 
 export function useCollection() {
@@ -46,9 +46,6 @@ export function useCollection() {
       queryKey: ['object', id],
       queryFn: ({ signal }: { signal: AbortSignal }) =>
         apiLimiter(() => getArtwork(id, signal)),
-      staleTime: STALE_TIME,
-      retry: 2,
-      retryDelay: (attempt: number) => Math.min(1000 * 2 ** attempt, 5000),
     })),
   })
 

@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
 
-interface BlurImageProps {
+interface ProgressiveImageProps {
   src: string
   alt: string
   className?: string
   contain?: boolean
 }
 
-export function BlurImage({ src, alt, className, contain }: BlurImageProps) {
+export function ProgressiveImage({ src, alt, className, contain }: ProgressiveImageProps) {
   const [loaded, setLoaded] = useState(false)
   const [error, setError] = useState(false)
 

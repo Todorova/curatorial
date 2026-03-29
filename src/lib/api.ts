@@ -1,5 +1,6 @@
 import { MET_API_BASE, RELATED_WORKS_YEAR_RANGE } from './constants'
 import { parseArtwork, parseSearchResult } from './schemas'
+import { apiLimiter } from './api-limiter'
 import type { Artwork, Department, SearchResult } from '@/types/artwork'
 
 export async function searchArtworks(
@@ -45,7 +46,7 @@ export async function getArtworksBatch(
   signal?: AbortSignal,
 ): Promise<Artwork[]> {
   const results = await Promise.allSettled(
-    objectIDs.map((id) => getArtwork(id, signal))
+    objectIDs.map((id) => apiLimiter(() => getArtwork(id, signal)))
   )
   return results
     .filter((r): r is PromiseFulfilledResult<Artwork> => r.status === 'fulfilled')

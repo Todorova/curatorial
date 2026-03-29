@@ -1,7 +1,7 @@
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { ArrowLeft, ExternalLink } from 'lucide-react'
 import { useArtworkDetail } from '@/hooks/use-artwork-detail'
-import { BlurImage } from '@/components/blur-image'
+import { ProgressiveImage } from '@/components/blur-image'
 import { CollectButton } from '@/components/collect-button'
 import { RelatedWorks } from '@/components/related-works'
 import { Badge } from '@/components/ui/badge'
@@ -53,7 +53,7 @@ export function ArtworkDetailPage() {
           <div className="grid gap-12 lg:grid-cols-2 max-md:gap-8">
             {/* Left: Image */}
             <div>
-              <BlurImage
+              <ProgressiveImage
                 src={artwork.primaryImage || artwork.primaryImageSmall}
                 alt={`${artwork.title}${artwork.artistDisplayName ? ` by ${artwork.artistDisplayName}` : ''}`}
                 className="w-full border border-border"
