@@ -2,12 +2,10 @@ import { useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { DepartmentTag } from './department-tag'
 import { getDepartments } from '@/lib/api'
-import { useMediaQuery } from '@/hooks/use-media-query'
 
 export function DepartmentFilter() {
   const [searchParams, setSearchParams] = useSearchParams()
   const activeDeptId = Number(searchParams.get('dept') ?? 0)
-  const isMobile = useMediaQuery('(max-width: 767px)')
 
   const { data: departments } = useQuery({
     queryKey: ['departments'],
@@ -40,11 +38,7 @@ export function DepartmentFilter() {
       className="px-8 pb-8 max-md:px-4 max-md:pb-6"
     >
       <div
-        className={
-          isMobile
-            ? 'flex gap-2 overflow-x-auto scrollbar-none [mask-image:linear-gradient(to_right,black_calc(100%-32px),transparent)]'
-            : 'flex flex-wrap gap-2'
-        }
+        className="flex gap-2 overflow-x-auto scrollbar-none [mask-image:linear-gradient(to_right,black_calc(100%-32px),transparent)] md:flex-wrap md:overflow-x-visible md:[mask-image:none]"
       >
         {allDepts.map((dept) => (
           <DepartmentTag

@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { X } from 'lucide-react'
-import { useDebounce } from '@/hooks/use-debounce'
 import { DATE_BEGIN_MIN, DATE_END_MAX } from '@/lib/constants'
 
 export function DateRangeFilter() {
@@ -9,39 +8,19 @@ export function DateRangeFilter() {
   const [fromYear, setFromYear] = useState(searchParams.get('dateBegin') ?? '')
   const [toYear, setToYear] = useState(searchParams.get('dateEnd') ?? '')
 
-  const debouncedFrom = useDebounce(fromYear, 500)
-  const debouncedTo = useDebounce(toYear, 500)
-
   const hasValues = fromYear !== '' || toYear !== ''
-  const isPartial = (fromYear !== '' && toYear === '') || (fromYear === '' && toYear !== '')
 
   // Validation
   const fromNum = fromYear !== '' ? Number(fromYear) : null
   const toNum = toYear !== '' ? Number(toYear) : null
+  const isPartial = (fromYear !== '' && toYear === '') || (fromYear === '' && toYear !== '')
   const isInvalidRange = fromNum !== null && toNum !== null && fromNum > toNum
   const isOutOfBounds =
     (fromNum !== null && (fromNum < DATE_BEGIN_MIN || fromNum > DATE_END_MAX)) ||
     (toNum !== null && (toNum < DATE_BEGIN_MIN || toNum > DATE_END_MAX))
-  const isValid = !isPartial && !isInvalidRange && !isOutOfBounds
 
-  // Sync debounced values to URL only when valid
-  useEffect(() => {
-    if (debouncedFrom !== '' && debouncedTo !== '') {
-      const from = Number(debouncedFrom)
-      const to = Number(debouncedTo)
-      // Only apply if valid range within bounds
-      if (from <= to && from >= DATE_BEGIN_MIN && to <= DATE_END_MAX) {
-        setSearchParams((prev) => {
-          const next = new URLSearchParams(prev)
-          next.set('dateBegin', debouncedFrom)
-          next.set('dateEnd', debouncedTo)
-          next.delete('page')
-          return next
-        }, { replace: true })
-      }
-    } else if (debouncedFrom === '' && debouncedTo === '') {
-      // Only update URL if date params actually exist — avoids
-      // clearing the page param on unrelated URL changes
+  function syncToUrl() {
+    if (fromYear === '' && toYear === '') {
       setSearchParams((prev) => {
         if (!prev.has('dateBegin') && !prev.has('dateEnd')) return prev
         const next = new URLSearchParams(prev)
@@ -50,13 +29,35 @@ export function DateRangeFilter() {
         next.delete('page')
         return next
       }, { replace: true })
+      return
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedFrom, debouncedTo])
 
-  const handleClear = () => {
+    if (isPartial || isInvalidRange || isOutOfBounds) return
+
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev)
+      next.set('dateBegin', fromYear)
+      next.set('dateEnd', toYear)
+      next.delete('page')
+      return next
+    }, { replace: true })
+  }
+
+  function handleClear() {
     setFromYear('')
     setToYear('')
+    setSearchParams((prev) => {
+      if (!prev.has('dateBegin') && !prev.has('dateEnd')) return prev
+      const next = new URLSearchParams(prev)
+      next.delete('dateBegin')
+      next.delete('dateEnd')
+      next.delete('page')
+      return next
+    }, { replace: true })
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === 'Enter') syncToUrl()
   }
 
   // Validation message
@@ -64,6 +65,8 @@ export function DateRangeFilter() {
   if (isPartial) hint = 'Both years required'
   else if (isInvalidRange) hint = 'From must be before To'
   else if (isOutOfBounds) hint = `Range: ${DATE_BEGIN_MIN} to ${DATE_END_MAX}`
+
+  const hasError = isPartial || isInvalidRange || isOutOfBounds
 
   return (
     <div className="flex items-center gap-3 px-8 pb-6 max-md:px-4 max-md:pb-4">
@@ -75,11 +78,13 @@ export function DateRangeFilter() {
           type="number"
           value={fromYear}
           onChange={(e) => setFromYear(e.target.value)}
+          onBlur={syncToUrl}
+          onKeyDown={handleKeyDown}
           placeholder={String(DATE_BEGIN_MIN)}
           min={DATE_BEGIN_MIN}
           max={DATE_END_MAX}
           aria-label="From year (negative for BCE)"
-          aria-invalid={isInvalidRange || isOutOfBounds || undefined}
+          aria-invalid={hasError || undefined}
           className="h-8 w-24 border border-border bg-transparent px-2 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-accent focus:outline-none transition-colors"
         />
         <span className="text-xs text-muted-foreground">&mdash;</span>
@@ -87,11 +92,13 @@ export function DateRangeFilter() {
           type="number"
           value={toYear}
           onChange={(e) => setToYear(e.target.value)}
+          onBlur={syncToUrl}
+          onKeyDown={handleKeyDown}
           placeholder={String(DATE_END_MAX)}
           min={DATE_BEGIN_MIN}
           max={DATE_END_MAX}
           aria-label="To year (negative for BCE)"
-          aria-invalid={isInvalidRange || isOutOfBounds || undefined}
+          aria-invalid={hasError || undefined}
           className="h-8 w-24 border border-border bg-transparent px-2 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-accent focus:outline-none transition-colors"
         />
         {hasValues && (
@@ -105,7 +112,7 @@ export function DateRangeFilter() {
         )}
       </div>
       {hint && (
-        <span className={`text-xs italic ${isValid ? 'text-muted-foreground' : 'text-destructive'}`}>
+        <span className={`text-xs italic ${hasError ? 'text-destructive' : 'text-muted-foreground'}`}>
           {hint}
         </span>
       )}

@@ -11,8 +11,6 @@ export function useArtworkDetail(objectID: number) {
   const artworkQuery = useQuery({
     queryKey: ['artwork', objectID],
     queryFn: ({ signal }) => getArtwork(objectID, signal),
-    retry: 2,
-    retryDelay: (attempt: number) => Math.min(1000 * 2 ** attempt, 5000),
   })
 
   const departmentsQuery = useQuery({
@@ -42,7 +40,6 @@ export function useArtworkDetail(objectID: number) {
       )
     },
     enabled: !!artwork && deptId > 0,
-    staleTime: 10 * 60 * 1000,
     placeholderData: keepPreviousData,
   })
 
@@ -55,7 +52,6 @@ export function useArtworkDetail(objectID: number) {
     queryKey: ['related-works', relatedIDs],
     queryFn: ({ signal }) => getArtworksBatch(relatedIDs, signal),
     enabled: relatedIDs.length > 0,
-    staleTime: 10 * 60 * 1000,
   })
 
   return {

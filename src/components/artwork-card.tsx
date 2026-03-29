@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import type { Artwork } from '@/types/artwork'
-import { BlurImage } from './blur-image'
+import { ProgressiveImage } from './blur-image'
 import { CollectButton } from './collect-button'
 
 interface ArtworkCardProps {
@@ -17,7 +17,7 @@ export function ArtworkCard({ artwork, style }: ArtworkCardProps) {
     >
       {/* Image */}
       <div className="relative overflow-hidden border border-border">
-        <BlurImage
+        <ProgressiveImage
           src={artwork.primaryImageSmall}
           alt={`${artwork.title}${artwork.artistDisplayName ? ` by ${artwork.artistDisplayName}` : ''}`}
           className="aspect-[4/3] transition-transform duration-300 ease-out group-hover:-translate-y-1 group-hover:shadow-card-hover"
