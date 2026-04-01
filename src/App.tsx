@@ -3,7 +3,6 @@ import { Routes, Route } from 'react-router-dom'
 import { Navbar } from '@/components/navbar'
 import { Footer } from '@/components/footer'
 import { ErrorBoundary } from '@/components/error-boundary'
-import { ArtworkGridSkeleton } from '@/components/artwork-skeleton'
 
 const CollectionPage = lazy(() =>
   import('@/pages/collection').then((m) => ({ default: m.CollectionPage })),
@@ -24,7 +23,7 @@ export default function App() {
       <Navbar />
       <main className="flex-1">
         <ErrorBoundary>
-          <Suspense fallback={<ArtworkGridSkeleton />}>
+          <Suspense fallback={null}>
             <Routes>
               <Route path="/" element={<CollectionPage />} />
               <Route path="/artwork/:id" element={<ArtworkDetailPage />} />
