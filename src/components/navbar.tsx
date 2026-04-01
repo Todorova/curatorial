@@ -44,7 +44,7 @@ export function Navbar() {
             : 'bg-background'
         )}
       >
-        <div className="mx-auto flex h-16 max-w-content items-center justify-between px-8 md:h-16 max-md:h-14 max-md:px-4">
+        <div className="mx-auto flex h-16 max-w-page items-center justify-between px-8 md:h-16 max-md:h-14 max-md:px-4">
           {/* Wordmark */}
           <Link
             to="/"
@@ -125,7 +125,7 @@ export function Navbar() {
         {/* Search bar (expandable) */}
         {searchOpen && (
           <div className="border-t border-border">
-            <div className="mx-auto max-w-content px-8 py-3 max-md:px-4">
+            <div className="mx-auto max-w-page px-8 py-3 max-md:px-4">
               <SearchBar onClose={() => setSearchOpen(false)} />
             </div>
           </div>
