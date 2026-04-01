@@ -18,9 +18,12 @@ export function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false)
   const { count } = useCollected()
 
+  const showSearch = location.pathname !== '/about'
+
   useEffect(() => {
     setMobileMenuOpen(false)
-  }, [location.pathname])
+    if (!showSearch) setSearchOpen(false)
+  }, [location.pathname, showSearch])
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 0)
@@ -77,24 +80,28 @@ export function Navbar() {
             ))}
 
             {/* Search toggle */}
-            <button
-              onClick={() => setSearchOpen(!searchOpen)}
-              className="flex h-10 w-10 items-center justify-center text-muted-foreground transition-colors hover:text-foreground cursor-pointer"
-              aria-label={searchOpen ? 'Close search' : 'Open search'}
-            >
-              {searchOpen ? <X size={18} strokeWidth={1.5} /> : <Search size={18} strokeWidth={1.5} />}
-            </button>
+            {showSearch && (
+              <button
+                onClick={() => setSearchOpen(!searchOpen)}
+                className="flex h-10 w-10 items-center justify-center text-muted-foreground transition-colors hover:text-foreground cursor-pointer"
+                aria-label={searchOpen ? 'Close search' : 'Open search'}
+              >
+                {searchOpen ? <X size={18} strokeWidth={1.5} /> : <Search size={18} strokeWidth={1.5} />}
+              </button>
+            )}
           </nav>
 
           {/* Mobile controls */}
           <div className="flex items-center gap-2 md:hidden">
-            <button
-              onClick={() => setSearchOpen(!searchOpen)}
-              className="flex h-11 w-11 items-center justify-center text-muted-foreground cursor-pointer"
-              aria-label={searchOpen ? 'Close search' : 'Open search'}
-            >
-              {searchOpen ? <X size={18} strokeWidth={1.5} /> : <Search size={18} strokeWidth={1.5} />}
-            </button>
+            {showSearch && (
+              <button
+                onClick={() => setSearchOpen(!searchOpen)}
+                className="flex h-11 w-11 items-center justify-center text-muted-foreground cursor-pointer"
+                aria-label={searchOpen ? 'Close search' : 'Open search'}
+              >
+                {searchOpen ? <X size={18} strokeWidth={1.5} /> : <Search size={18} strokeWidth={1.5} />}
+              </button>
+            )}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="flex h-11 w-11 items-center justify-center text-muted-foreground cursor-pointer"
