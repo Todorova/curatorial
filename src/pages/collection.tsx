@@ -19,10 +19,10 @@ function CollectionContent() {
     totalPages,
     totalItems,
     itemsPerPage,
-    hasQuery,
+    hasFilters,
   } = useCollection()
 
-  if (!hasQuery) {
+  if (!hasFilters) {
     return (
       <div className="py-20 text-center">
         <p className="text-sm text-muted-foreground">
