@@ -1,54 +1,24 @@
-export interface ArtworkTag {
-  term: string
-}
+import type { z } from 'zod'
+import type {
+  ArtworkSchema,
+  TagSchema,
+  ConstituentSchema,
+  SearchResultSchema,
+  DepartmentSchema,
+} from '@/lib/schemas'
 
-export interface ArtworkConstituent {
-  name: string
-  role: string
-}
+export type ArtworkTag = z.infer<typeof TagSchema>
 
-export interface Artwork {
-  objectID: number
-  title: string
-  artistDisplayName: string
-  artistDisplayBio: string
-  objectDate: string
-  objectBeginDate: number
-  objectEndDate: number
-  medium: string
-  department: string
-  primaryImageSmall: string
-  primaryImage: string
-  isHighlight: boolean
-  accessionNumber: string
-  dimensions: string
-  creditLine: string
-  objectURL: string
-  tags: ArtworkTag[]
-  constituents: ArtworkConstituent[] | null
-  isPublicDomain: boolean
-}
+export type ArtworkConstituent = z.infer<typeof ConstituentSchema>
+
+export type Artwork = z.infer<typeof ArtworkSchema>
+
+export type SearchResult = z.infer<typeof SearchResultSchema>
+
+export type Department = z.infer<typeof DepartmentSchema>
 
 /** Minimal artwork data stored in the "Collected" session state */
-export interface CollectedArtwork {
-  objectID: number
-  title: string
-  artistDisplayName: string
-  objectDate: string
-  primaryImageSmall: string
-  department: string
-}
-
-export interface SearchResult {
-  total: number
-  objectIDs: number[]
-}
-
-export interface Department {
-  departmentId: number
-  displayName: string
-}
-
-export interface DepartmentsResponse {
-  departments: Department[]
-}
+export type CollectedArtwork = Pick<
+  Artwork,
+  'objectID' | 'title' | 'artistDisplayName' | 'objectDate' | 'primaryImageSmall' | 'department'
+>
