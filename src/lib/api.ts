@@ -10,13 +10,9 @@ export async function searchArtworks(
   dateEnd?: number,
   signal?: AbortSignal,
 ): Promise<SearchResult> {
-  if (!query?.trim()) {
-    return { total: 0, objectIDs: [] }
-  }
-
   const params = new URLSearchParams()
   params.set('hasImages', 'true')
-  params.set('q', query.trim())
+  params.set('q', query?.trim() || '*')
 
   if (departmentId && departmentId > 0) {
     params.set('departmentId', String(departmentId))

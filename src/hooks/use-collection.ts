@@ -18,14 +18,14 @@ export function useCollection() {
     ? Number(searchParams.get('dateEnd'))
     : undefined
 
-  const hasQuery = !!query?.trim()
+  const hasFilters = !!query?.trim() || departmentId > 0 || (dateBegin != null && dateEnd != null)
 
   // Step 1: Search for object IDs
   const searchQuery = useQuery({
     queryKey: ['search', departmentId, query, dateBegin, dateEnd],
     queryFn: ({ signal }) =>
       searchArtworks(departmentId || undefined, query, dateBegin, dateEnd, signal),
-    enabled: hasQuery,
+    enabled: hasFilters,
     placeholderData: keepPreviousData,
   })
 
@@ -77,6 +77,6 @@ export function useCollection() {
     totalPages,
     totalItems,
     itemsPerPage: ITEMS_PER_PAGE,
-    hasQuery,
+    hasFilters,
   }
 }
