@@ -1,13 +1,14 @@
 import { useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { DepartmentTag } from './department-tag'
+import { Skeleton } from '@/components/ui/skeleton'
 import { getDepartments } from '@/lib/api'
 
 export function DepartmentFilter() {
   const [searchParams, setSearchParams] = useSearchParams()
   const activeDeptId = Number(searchParams.get('dept') ?? 0)
 
-  const { data: departments } = useQuery({
+  const { data: departments, isLoading } = useQuery({
     queryKey: ['departments'],
     queryFn: ({ signal }) => getDepartments(signal),
     staleTime: Infinity,
@@ -26,11 +27,6 @@ export function DepartmentFilter() {
     })
   }
 
-  const allDepts = [
-    { departmentId: 0, displayName: 'All' },
-    ...(departments ?? []),
-  ]
-
   return (
     <div
       role="group"
@@ -40,14 +36,23 @@ export function DepartmentFilter() {
       <div
         className="flex gap-2 overflow-x-auto scrollbar-none [mask-image:linear-gradient(to_right,black_calc(100%-32px),transparent)] md:flex-wrap md:overflow-x-visible md:[mask-image:none]"
       >
-        {allDepts.map((dept) => (
-          <DepartmentTag
-            key={dept.departmentId}
-            label={dept.displayName}
-            isActive={activeDeptId === dept.departmentId}
-            onClick={() => handleSelect(dept.departmentId)}
-          />
-        ))}
+        <DepartmentTag
+          label="All"
+          isActive={activeDeptId === 0}
+          onClick={() => handleSelect(0)}
+        />
+        {isLoading
+          ? [16, 24, 20, 14, 22, 18, 16, 20].map((w, i) => (
+              <Skeleton key={i} className={`h-[30px] shrink-0 rounded-sm`} style={{ width: `${w * 4}px` }} />
+            ))
+          : (departments ?? []).map((dept) => (
+              <DepartmentTag
+                key={dept.departmentId}
+                label={dept.displayName}
+                isActive={activeDeptId === dept.departmentId}
+                onClick={() => handleSelect(dept.departmentId)}
+              />
+            ))}
       </div>
     </div>
   )
