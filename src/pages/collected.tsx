@@ -1,4 +1,6 @@
+import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
+import { X } from 'lucide-react'
 import { PageHeader } from '@/components/page-header'
 import { ArtworkGrid } from '@/components/artwork-grid'
 import { useCollected } from '@/context/collected-context'
@@ -6,6 +8,17 @@ import { useCollected } from '@/context/collected-context'
 export function CollectedPage() {
   const { items } = useCollected()
   const artworks = Array.from(items.values())
+  const [filter, setFilter] = useState('')
+
+  const filtered = useMemo(() => {
+    const term = filter.trim().toLowerCase()
+    if (!term) return artworks
+    return artworks.filter(
+      (a) =>
+        a.title.toLowerCase().includes(term) ||
+        a.artistDisplayName.toLowerCase().includes(term),
+    )
+  }, [artworks, filter])
 
   return (
     <>
@@ -46,7 +59,39 @@ export function CollectedPage() {
           </Link>
         </div>
       ) : (
-        <ArtworkGrid artworks={artworks} />
+        <>
+          {/* Filter input */}
+          <div className="px-8 pb-6 max-md:px-4">
+            <div className="relative">
+              <input
+                type="text"
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                placeholder="Filter by title or artist..."
+                className="w-full border-b border-border bg-transparent py-2 text-sm text-foreground placeholder:text-muted-foreground placeholder:italic focus:border-accent focus:outline-none transition-colors"
+              />
+              {filter && (
+                <button
+                  onClick={() => setFilter('')}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                  aria-label="Clear filter"
+                >
+                  <X size={14} strokeWidth={1.5} />
+                </button>
+              )}
+            </div>
+          </div>
+
+          {filtered.length === 0 ? (
+            <div className="py-16 text-center">
+              <p className="text-sm text-muted-foreground">
+                No works match "{filter}"
+              </p>
+            </div>
+          ) : (
+            <ArtworkGrid artworks={filtered} />
+          )}
+        </>
       )}
     </>
   )
