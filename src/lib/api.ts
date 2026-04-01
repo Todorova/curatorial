@@ -1,5 +1,5 @@
 import { MET_API_BASE, RELATED_WORKS_YEAR_RANGE } from './constants'
-import { parseArtwork, parseSearchResult } from './schemas'
+import { parseArtwork, parseSearchResult, parseDepartments } from './schemas'
 import { apiLimiter } from './api-limiter'
 import type { Artwork, Department, SearchResult } from '@/types/artwork'
 
@@ -56,8 +56,7 @@ export async function getArtworksBatch(
 export async function getDepartments(signal?: AbortSignal): Promise<Department[]> {
   const res = await fetch(`${MET_API_BASE}/departments`, { signal })
   if (!res.ok) throw new Error('Failed to fetch departments')
-  const data = await res.json()
-  return data.departments ?? []
+  return parseDepartments(await res.json())
 }
 
 export async function searchRelatedWorks(

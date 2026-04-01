@@ -1,5 +1,4 @@
 import { z } from 'zod'
-import type { Artwork, SearchResult } from '@/types/artwork'
 
 /** Accepts string or null, returns string (null → fallback) */
 function nullableString(fallback = '') {
@@ -19,18 +18,18 @@ function nullableNumber(fallback = 0) {
     .transform((v) => v ?? fallback)
 }
 
-const TagSchema = z
+export const TagSchema = z
   .object({ term: z.string() })
   .passthrough()
 
-const ConstituentSchema = z
+export const ConstituentSchema = z
   .object({
     name: nullableString(),
     role: nullableString(),
   })
   .passthrough()
 
-const ArtworkSchema = z
+export const ArtworkSchema = z
   .object({
     objectID: z.number(),
     title: nullableString('Untitled'),
@@ -58,7 +57,7 @@ const ArtworkSchema = z
   })
   .passthrough()
 
-const SearchResultSchema = z.object({
+export const SearchResultSchema = z.object({
   total: z.number().optional().default(0),
   objectIDs: z
     .array(z.number())
@@ -67,10 +66,23 @@ const SearchResultSchema = z.object({
     .transform((v) => v ?? []),
 })
 
-export function parseArtwork(raw: unknown): Artwork {
+export const DepartmentSchema = z.object({
+  departmentId: z.number(),
+  displayName: z.string(),
+})
+
+const DepartmentsResponseSchema = z.object({
+  departments: z.array(DepartmentSchema),
+})
+
+export function parseArtwork(raw: unknown) {
   return ArtworkSchema.parse(raw)
 }
 
-export function parseSearchResult(raw: unknown): SearchResult {
+export function parseSearchResult(raw: unknown) {
   return SearchResultSchema.parse(raw)
+}
+
+export function parseDepartments(raw: unknown) {
+  return DepartmentsResponseSchema.parse(raw).departments
 }
